@@ -58,7 +58,7 @@
     "_groupIndex": 0,
     "groupIndex": 0,
     "autoReleaseAssets": false,
-    "_id": "faJgZpc1JHSpRs1E0TAd4U"
+    "_id": "bf78ec79-cc1f-4014-b7a9-c5cc2afd306e"
   },
   {
     "__type__": "cc.Node",
@@ -468,7 +468,7 @@
       "ctor": "Float64Array",
       "array": [
         0,
-        0,
+        -130.679,
         0,
         0,
         0,
@@ -533,6 +533,8 @@
     },
     "_enabled": true,
     "speed": 0,
+    "jumpHeight": 50,
+    "jumpDuration": 0.3,
     "_id": "a6m2zp2VRNEKt3G2uzVaRp"
   },
   {
