@@ -8,17 +8,23 @@ export default class NewClass extends cc.Component {
 
     // Main character's jump height
     @property
-    jumpHeight = 0
+    jumpHeight = 0;
 
     // Main character's jump duration
     @property
-    jumpDuration = 0
+    jumpDuration = 0;
 
+    @property
+    moveSpeed = 0;
 
     private goLeft: boolean;
     private goRight: boolean;
-    private jump: boolean;
-    private inJump: boolean;
+
+    private _curJumpTime: number = 0;
+    private _jumpTime = 2* this.jumpDuration;
+
+    private statrJump: boolean;
+    private isJumping: boolean;
      
     onKeyDown(event) {
         // set a flag when key pressed
@@ -30,7 +36,7 @@ export default class NewClass extends cc.Component {
                 this.goRight = true;
                 break;
             case cc.macro.KEY.w:
-                this.jump = true;
+                this.statrJump = true;
                 break;
         }
     }
@@ -45,28 +51,37 @@ export default class NewClass extends cc.Component {
                 this.goRight = false;
                 break;
             case cc.macro.KEY.w:
-                this.jump = false;
+                this.statrJump = false;
                 break;
         }
     }
 
     runJumpAction () {
-        // Jump up
-        var jumpUp = cc.moveBy(this.jumpDuration,cc.v2(0, this.jumpHeight))
-        // Jump down
-        var jumpDown = cc.moveBy(this.jumpDuration,cc.v2(0,- this.jumpHeight))
+        var jumpUp = cc.tween().by(this.jumpDuration, {y: this.jumpHeight}, {easing: 'sineOut'});
+        return jumpUp;
+    }
 
-        // Create a easing and perform actions in the order of "jumpUp", "jumpDown"
-        
-        return cc.sequence(jumpUp, jumpDown);
+    moveAround(dt){
+        let direction = new cc.Vec3(0, 0, 0);
+        if (this.goLeft) {
+            direction.x -= 1;
+        } 
+        if (this.goRight) {
+            direction.x += 1;
+        }
+
+        if (direction.magSqr() > 0) {
+            direction.normalize();
+            let newPosition = this.node.position.add(direction.multiplyScalar(this.speed * dt));
+            this.node.setPosition(newPosition);
+        }
     }
 
     start () {
         this.goLeft = false;
         this.goRight = false;
-        this.jump = false;
-        this.inJump = false;
-        this.speed = 500;
+        this.statrJump = false;
+        this.isJumping = false;
 
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN,this.onKeyDown, this);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP,this.onKeyUp, this);
@@ -77,29 +92,19 @@ export default class NewClass extends cc.Component {
         cc.systemEvent.off(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
     }
     update (dt) {
-        let direction = new cc.Vec3(0, 0, 0);
-        if (this.goLeft) {
-            direction.x -= 1;
-        } 
-        if (this.goRight) {
-            direction.x += 1;
-        }
-        if(!this.inJump){
-            if (this.jump){
+        this.moveAround(dt);
+        if(this.statrJump){
+            
+            this._curJumpTime +=dt;
+            if(this._curJumpTime<this._jumpTime){
+                this.isJumping = true;
                 var jumpAction = this.runJumpAction();
-                this.node.runAction(jumpAction);
-                
-                    this.inJump = true;
-         
+                cc.tween(this.node).then(jumpAction).start()
+            }
+            else{
+                this._curJumpTime = 0;
+                this.isJumping = false;
             }
         }
-    
-        if (direction.magSqr() > 0) {
-            direction.normalize();
-            let newPosition = this.node.position.add(direction.multiplyScalar(this.speed * dt));
-            this.node.setPosition(newPosition);
-        }
-
-        this.inJump = false;
     }
 }
