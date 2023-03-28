@@ -94,17 +94,9 @@ export default class NewClass extends cc.Component {
     update (dt) {
         this.moveAround(dt);
         if(this.statrJump){
-            
-            this._curJumpTime +=dt;
-            if(this._curJumpTime<this._jumpTime){
-                this.isJumping = true;
-                var jumpAction = this.runJumpAction();
-                cc.tween(this.node).then(jumpAction).start()
-            }
-            else{
-                this._curJumpTime = 0;
-                this.isJumping = false;
-            }
+            this.statrJump = false;
+            var jumpAction = this.runJumpAction();
+            cc.tween(this.node).then(jumpAction).start()
         }
     }
 }
