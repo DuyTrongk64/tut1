@@ -84,7 +84,7 @@ export default class NewClass extends cc.Component {
     onCollisionEnter(other: cc.PhysicsCollider, self: cc.PhysicsCollider){
         console.log(`Collided with ${other.node.name}!`);
         if(other.node.name == 'ground'){
-            this.canDrop = false;
+            this.canDrop = true;
         }
     }
 
@@ -127,7 +127,8 @@ export default class NewClass extends cc.Component {
     }
     update (dt) {
         this.moveAround(dt);
-        this.setVelocity(dt);
+        //this.setVelocity(dt);
+        console.log(`canDrop is ${this.canDrop}`);
         if(this.statrJump){
             this.statrJump = false;
             var jumpAction = this.runJumpAction();
