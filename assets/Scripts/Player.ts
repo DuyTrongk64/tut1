@@ -25,7 +25,11 @@ export default class NewClass extends cc.Component {
 
     private statrJump: boolean;
     private isJumping: boolean;
-     
+    
+    private canDrop: boolean;
+
+    private phys = cc.director.getPhysicsManager();
+    private velocity = new cc.Vec3(0, 0, 0);
     onKeyDown(event) {
         // set a flag when key pressed
         switch(event.keyCode) {
@@ -77,12 +81,42 @@ export default class NewClass extends cc.Component {
         }
     }
 
+    onCollisionEnter(other: cc.PhysicsCollider, self: cc.PhysicsCollider){
+        console.log(`Collided with ${other.node.name}!`);
+        if(other.node.name == 'ground'){
+            this.canDrop = false;
+        }
+    }
+
+    setVelocity(dt){
+
+        if(this.canDrop){
+            this.velocity.y += -cc.director.getPhysicsManager().gravity.y * dt;
+
+            // Move the node based on the velocity
+            const newPos = this.node.position.add(this.velocity.multiplyScalar(dt));
+            this.node.setPosition(newPos);
+        }
+        
+    }
+    onLoad(){
+        //set physics
+        
+        this.phys.enabled = true;
+        
+        let rigidBody = this.node.getComponent(cc.RigidBody);
+        rigidBody.enabledContactListener = true;
+        
+        
+    }
     start () {
         this.goLeft = false;
         this.goRight = false;
         this.statrJump = false;
         this.isJumping = false;
+        this.canDrop = true;
 
+        this.phys.gravity = cc.v2(0, -20);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN,this.onKeyDown, this);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP,this.onKeyUp, this);
     }
@@ -93,6 +127,7 @@ export default class NewClass extends cc.Component {
     }
     update (dt) {
         this.moveAround(dt);
+        this.setVelocity(dt);
         if(this.statrJump){
             this.statrJump = false;
             var jumpAction = this.runJumpAction();

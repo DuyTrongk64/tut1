@@ -1,24 +1,22 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
-
 const {ccclass, property} = cc._decorator;
 
 @ccclass
 export default class NewClass extends cc.Component {
 
-    @property(cc.Label)
-    label: cc.Label = null;
+    onCollisionEnter(other: cc.PhysicsCollider, self: cc.PhysicsCollider){
+        console.log(`Collided with ${other.node.name}!`);
+        if(other.node.name == 'PurpleMonster'){
+            this.node.destroy();
+        }
+    }
 
-    @property
-    text: string = 'hello';
-
-    // LIFE-CYCLE CALLBACKS:
-
-    // onLoad () {}
+    onLoad () {
+        //set collider
+        var manager = cc.director.getCollisionManager();
+        manager.enabled = true;
+        manager.enabledDebugDraw = true;
+        manager.enabledDrawBoundingBox = true;   
+    }
 
     start () {
 

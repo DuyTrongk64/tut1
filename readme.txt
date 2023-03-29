@@ -1,0 +1,1 @@
+(0,0) là điểm chính giữa màn hình -> tương đương với (480,320).

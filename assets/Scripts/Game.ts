@@ -6,6 +6,9 @@ export default class NewClass extends cc.Component {
     @property(cc.Prefab)
     starPrefab: cc.Prefab= null;
 
+    @property(cc.Prefab)
+    groudPrefab: cc.Prefab= null;
+
     @property(cc.Node)
     playerNode: cc.Node= null;
 
