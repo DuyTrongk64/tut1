@@ -112,27 +112,6 @@
     "_id": ""
   },
   {
-    "__type__": "cc.BoxCollider",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 1
-    },
-    "_enabled": true,
-    "tag": 0,
-    "_offset": {
-      "__type__": "cc.Vec2",
-      "x": 480,
-      "y": 89.3
-    },
-    "_size": {
-      "__type__": "cc.Size",
-      "width": 960,
-      "height": 179.6
-    },
-    "_id": ""
-  },
-  {
     "__type__": "cc.RigidBody",
     "_name": "",
     "_objFlags": 0,
@@ -155,6 +134,32 @@
     "enabledContactListener": false,
     "bullet": false,
     "awakeOnLoad": true,
+    "_id": ""
+  },
+  {
+    "__type__": "cc.PhysicsBoxCollider",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "tag": 0,
+    "_density": 1,
+    "_sensor": true,
+    "_friction": 0.2,
+    "_restitution": 0,
+    "body": null,
+    "_offset": {
+      "__type__": "cc.Vec2",
+      "x": 480,
+      "y": 92
+    },
+    "_size": {
+      "__type__": "cc.Size",
+      "width": 960,
+      "height": 184
+    },
     "_id": ""
   },
   {
