@@ -16,7 +16,7 @@ export default class NewClass extends cc.Component {
     Jump_Force = 0;
 
     private Rigid_Body;
-    private isJumping: boolean;
+    private on_the_ground: boolean;
 
     onLoad(){
         //set physics
@@ -31,7 +31,7 @@ export default class NewClass extends cc.Component {
     }
 
     start () {
-        this.isJumping = false;
+        this.on_the_ground = false;
 
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN,this.onKeyDown, this);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP,this.onKeyUp, this);
@@ -52,9 +52,9 @@ export default class NewClass extends cc.Component {
                 this.Direction = 1;
                 break;
             case cc. macro.KEY.w:
-                if(!this.isJumping){
+                if(this.on_the_ground){
                     this.Rigid_Body.applyForceToCenter(cc.v2(0,this.Jump_Force),true);
-                    this.isJumping = true;
+                    this.on_the_ground = false;
                 }
                 break;
         }
@@ -77,10 +77,10 @@ export default class NewClass extends cc.Component {
             }
     }
 
-    onBeingContact(contact,other, self){
-        console.log(`Collided with ${other.node.name}!`);
-        if(self.tag === 2){
-            this.isJumping = false;
+    onBeginContact(contact,selfCollider, otherCollider){
+        //console.log(`Collided with ${otherCollider.node.name}!`);
+        if(selfCollider.tag === 2){
+            this.on_the_ground = true;
         }
     }
 
